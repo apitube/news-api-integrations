@@ -17,9 +17,9 @@ public class ExampleUsage {
 
             // Define parameters
             Map<String, String> params = new HashMap<>();
-            params.put("published_at", "[NOW-1HOUR/HOUR TO NOW/HOUR]");
-            params.put("language", "(en)");
-            params.put("categories", "(Technology OR Business)");
+            params.put("published_at.start", "NOW-1HOUR/HOUR");
+            params.put("language.code", "en");
+            params.put("category.id", "medtop:13000000,medtop:04000000");
             params.put("per_page", "5");
 
             // Fetch articles

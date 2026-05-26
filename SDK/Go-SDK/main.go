@@ -22,9 +22,9 @@ func main() {
 
     // Define parameters
     params := map[string]string{
-        "published_at": "[NOW-1HOUR/HOUR TO NOW/HOUR]",
-        "language":     "(en)",
-        "categories":   "(Technology OR Business)",
+        "published_at.start": "NOW-1HOUR/HOUR",
+        "language.code": "en",
+        "category.id": "medtop:13000000,medtop:04000000",
         "per_page":     "5",
     }
 
