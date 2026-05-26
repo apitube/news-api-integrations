@@ -1,33 +1,37 @@
 import { ApiTubeClient } from './client';
 
 export interface Article {
-    id: string;
-    title: string;
-    description: string;
-    url: string;
+    id: number;
+    title: string | null;
+    description: string | null;
+    href: string | null;
     source: {
-        name: string;
-        url: string;
+        id: number | null;
+        domain: string;
+        home_page_url: string;
     };
-    published_at: string;
+    published_at: string | null;
     language: string;
-    categories: string[];
+    categories: Array<{ id: number; name: string; score: number; taxonomy: string }>;
 }
 
 export interface NewsResponse {
     status: string;
-    total_results: number;
-    data: Article[];
+    page: number;
+    limit: number;
+    results: Article[];
 }
 
 export interface NewsQueryParams {
     per_page?: number;
-    offset?: number;
-    language?: string;
-    categories?: string;
+    page?: number;
+    'language.code'?: string;
+    'category.id'?: string;
     published_at?: string;
-    sort_by?: 'published_at' | 'relevance';
-    sort_order?: 'asc' | 'desc';
+    'published_at.start'?: string;
+    'published_at.end'?: string;
+    'sort.by'?: 'published_at' | 'relevance' | 'engagement' | 'quality' | 'controversy' | 'trust';
+    'sort.order'?: 'asc' | 'desc';
 }
 
 export class ApiTubeNewsService {
@@ -47,13 +51,13 @@ export class ApiTubeNewsService {
 
     async getArticlesByCategory(category: string, params: NewsQueryParams = {}): Promise<NewsResponse> {
         return this.client.request<NewsResponse>('/everything', {
-            params: { ...params, categories: category },
+            params: { ...params, 'category.id': category },
         });
     }
 
     async getArticlesByLanguage(language: string, params: NewsQueryParams = {}): Promise<NewsResponse> {
         return this.client.request<NewsResponse>('/everything', {
-            params: { ...params, language },
+            params: { ...params, 'language.code': language },
         });
     }
 }

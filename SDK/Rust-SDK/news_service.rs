@@ -5,27 +5,29 @@ use crate::client::{ApiTubeClient, ApiTubeError};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Source {
-    pub name: String,
-    pub url: String,
+    pub id: Option<u64>,
+    pub domain: Option<String>,
+    pub home_page_url: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Article {
-    pub id: String,
-    pub title: String,
+    pub id: u64,
+    pub title: Option<String>,
     pub description: Option<String>,
-    pub url: String,
+    pub href: Option<String>,
     pub source: Source,
-    pub published_at: String,
-    pub language: String,
-    pub categories: Vec<String>,
+    pub published_at: Option<String>,
+    pub language: Option<String>,
+    pub categories: Vec<serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NewsResponse {
     pub status: String,
-    pub total_results: u32,
-    pub data: Vec<Article>,
+    pub page: u32,
+    pub limit: u32,
+    pub results: Vec<Article>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -74,19 +76,19 @@ impl NewsQueryParams {
             params.insert("offset".to_string(), offset.to_string());
         }
         if let Some(ref language) = self.language {
-            params.insert("language".to_string(), language.clone());
+            params.insert("language.code".to_string(), language.clone());
         }
         if let Some(ref categories) = self.categories {
-            params.insert("categories".to_string(), categories.clone());
+            params.insert("category.id".to_string(), categories.clone());
         }
         if let Some(ref published_at) = self.published_at {
             params.insert("published_at".to_string(), published_at.clone());
         }
         if let Some(ref sort_by) = self.sort_by {
-            params.insert("sort_by".to_string(), sort_by.clone());
+            params.insert("sort.by".to_string(), sort_by.clone());
         }
         if let Some(ref sort_order) = self.sort_order {
-            params.insert("sort_order".to_string(), sort_order.clone());
+            params.insert("sort.order".to_string(), sort_order.clone());
         }
 
         params

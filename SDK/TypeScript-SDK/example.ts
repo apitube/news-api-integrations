@@ -16,22 +16,22 @@ async function main() {
         // Fetch latest news
         console.log('Fetching latest news...');
         const latestNews = await newsService.getEverything({ per_page: 10 });
-        console.log(`Found ${latestNews.total_results} articles`);
-        latestNews.data.forEach((article) => {
+        console.log(`Found ${latestNews.results.length} articles`);
+        latestNews.results.forEach((article) => {
             console.log(`- ${article.title}`);
         });
 
         // Fetch news by category
         console.log('\nFetching technology news...');
-        const techNews = await newsService.getArticlesByCategory('technology', { per_page: 5 });
-        techNews.data.forEach((article) => {
+        const techNews = await newsService.getArticlesByCategory('medtop:13000000', { per_page: 5 });
+        techNews.results.forEach((article) => {
             console.log(`- ${article.title}`);
         });
 
         // Fetch news by language
         console.log('\nFetching English news...');
         const englishNews = await newsService.getArticlesByLanguage('en', { per_page: 5 });
-        englishNews.data.forEach((article) => {
+        englishNews.results.forEach((article) => {
             console.log(`- ${article.title}`);
         });
     } catch (error) {

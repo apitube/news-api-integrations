@@ -14,18 +14,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let params = NewsQueryParams::new().per_page(10);
     let latest_news = news_service.get_everything(params).await?;
 
-    println!("Found {} articles", latest_news.total_results);
-    for article in &latest_news.data {
-        println!("- {}", article.title);
+    println!("Found {} articles", latest_news.results.len());
+    for article in &latest_news.results {
+        println!("- {}", article.title.as_deref().unwrap_or("(untitled)"));
     }
 
     // Fetch news by category
     println!("\nFetching technology news...");
     let params = NewsQueryParams::new().per_page(5);
-    let tech_news = news_service.get_by_category("technology", params).await?;
+    let tech_news = news_service.get_by_category("medtop:13000000", params).await?;
 
-    for article in &tech_news.data {
-        println!("- {}", article.title);
+    for article in &tech_news.results {
+        println!("- {}", article.title.as_deref().unwrap_or("(untitled)"));
     }
 
     // Fetch news by language
@@ -33,8 +33,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let params = NewsQueryParams::new().per_page(5);
     let english_news = news_service.get_by_language("en", params).await?;
 
-    for article in &english_news.data {
-        println!("- {}", article.title);
+    for article in &english_news.results {
+        println!("- {}", article.title.as_deref().unwrap_or("(untitled)"));
     }
 
     Ok(())
